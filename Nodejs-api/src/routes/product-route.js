@@ -8,6 +8,14 @@ router.post('/', controller.post);
 
 router.put('/:id', controller.put);
 
-router.delete('/', controller.delete);
+router.delete('/:id', controller.delete);
+
+router.get('/', controller.getAll);
+
+router.get('/:slug', controller.getBySlug);
+
+router.get('/admin/:id', controller.getById);
+
+router.get('/tags/:tag', controller.getByTag);
 
 module.exports = router;
