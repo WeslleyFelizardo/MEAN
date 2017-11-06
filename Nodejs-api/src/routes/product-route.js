@@ -3,8 +3,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/product-controller');
+const authservice = require('../services/auth-service');
 
-router.post('/', controller.post);
+router.post('/', authservice.authorize, controller.post);
 
 router.put('/:id', controller.put);
 
