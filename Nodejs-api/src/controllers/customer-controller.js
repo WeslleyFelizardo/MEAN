@@ -20,7 +20,8 @@ exports.save = async (req, res, next) => {
         await repository.save({
             name: req.body.email,
             email: req.body.email,
-            password: md5(req.body.password + global.SALT_KEY) //Criptografando a senha com md5
+            password: md5(req.body.password + global.SALT_KEY), //Criptografando a senha com md5
+            roles: ["user"]
         });
         res.status(200).send({message: 'Cadastrado com sucesso'});
     } catch (error) {
@@ -45,7 +46,8 @@ exports.authenticate = async (req, res, next) => {
             token: await authservice.generateToken({
                 email: data.email,
                 name: data.name,
-                id: data._id
+                id: data._id,
+                roles: data.roles
             })
         });
     

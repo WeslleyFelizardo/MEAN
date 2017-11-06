@@ -23,13 +23,41 @@ exports.authorize = function (req, res, next) {
             message: 'Acesso Restrito'
         });
     } else {
-        jwt.verify(token, global.SALT_KEY, function(error, decoded) {
+        jwt.verify(token, global.SALT_KEY, function (error, decoded) {
             if (error) {
                 res.status(401).json({
                     message: 'Token inválido'
                 });
             } else {
-                next(); 
+                next();
+            }
+        });
+    }
+}
+
+// Inteceptador usado no controller para pegar o token verificar se o mesmo foi gerado por
+// um login de perfil admin
+exports.isAdmin = (req, res, next) => {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    if (!token) {
+        res.status(401).json({
+            message: 'Acesso Restrito'
+        });
+    } else {
+        jwt.verify(token, global.SALT_KEY, function (error, decoded) {
+            if (error) {
+                res.status(401).json({
+                    message: 'Token inválido'
+                });
+            } else {
+                if (decoded.roles.includes('admin')) {
+                    next();
+                } else {
+                    res.status(401).json({
+                        message: 'Esta funcionalidade é restrita para administradores'
+                    });
+                }
             }
         });
     }
